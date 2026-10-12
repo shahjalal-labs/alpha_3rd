@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Legal &amp; Compliance Update - Uenal Sachverstaendigenbuero</title>
+<style>
+@page { size: A4; margin: 2cm; }
+body { font-family: Georgia, "Times New Roman", serif; font-size: 11pt; line-height: 1.5; color: #111; max-width: 19cm; margin: 0 auto; padding: 24px; background: #fff; }
+h1 { font-size: 22pt; margin: 0 0 4px; letter-spacing: -0.3px; }
+h2 { font-size: 14pt; margin: 34px 0 8px; padding-bottom: 5px; border-bottom: 1.5px solid #111; page-break-after: avoid; }
+h3 { font-size: 11.5pt; margin: 20px 0 6px; page-break-after: avoid; }
+p { margin: 0 0 10px; }
+.sub { font-size: 10.5pt; color: #444; margin: 0 0 2px; }
+.rule { border: 0; border-top: 3px solid #111; margin: 14px 0 22px; }
+table { border-collapse: collapse; width: 100%; margin: 10px 0 16px; font-family: Arial, Helvetica, sans-serif; font-size: 9.5pt; page-break-inside: avoid; }
+th { background: #f0f0f0; text-align: left; border: 1px solid #999; padding: 6px 8px; vertical-align: top; }
+td { border: 1px solid #999; padding: 6px 8px; vertical-align: top; }
+code { font-family: Consolas, "Courier New", monospace; font-size: 9.5pt; background: #f4f4f4; padding: 1px 3px; }
+ul, ol { margin: 0 0 12px; padding-left: 22px; }
+li { margin-bottom: 5px; }
+.box { border: 1.5px solid #111; background: #f7f7f7; padding: 12px 16px; margin: 14px 0 18px; page-break-inside: avoid; }
+.box p:last-child { margin-bottom: 0; }
+.tag { font-family: Arial, Helvetica, sans-serif; font-size: 8.5pt; font-weight: bold; text-transform: uppercase; letter-spacing: 0.4px; }
+.meta { font-family: Arial, Helvetica, sans-serif; font-size: 9.5pt; color: #444; }
+.footer { margin-top: 34px; padding-top: 10px; border-top: 1px solid #bbb; font-family: Arial, Helvetica, sans-serif; font-size: 9pt; color: #555; }
+</style>
+</head>
+<body>
+
+<h1>Legal &amp; Compliance Update</h1>
+<p class="sub"><strong>Uenal Sachverst&auml;ndigenb&uuml;ro</strong> &mdash; uenal-gutachten.de (Gutachten / SV site)</p>
+<p class="sub">Change documentation and handover &middot; 26 August 2026</p>
+<hr class="rule">
+
+<h2>1. What this document covers</h2>
+<p>This is the record of the German legal-text overhaul carried out on the Gutachten website. It lists every page that was replaced, every page that was newly created, every individual fix that was applied, the items that were already correct and therefore left alone, and the points that are still waiting on an answer from the client.</p>
+<p>The work was done from the three source files you supplied (<code>01_AGB.md</code>, <code>02_Impressum.md</code>, <code>03_Datenschutzerklaerung.md</code>) plus your numbered fix list. All legal text now lives in one single central file per site, so future wording changes are a one-place edit and never touch the layout.</p>
+<p><strong>Scope note:</strong> only the SV site was changed. The Facility Management site was not connected to this session, so section 11 of this document is the checklist to apply there later.</p>
+
+<h2>2. Where to see each change</h2>
+<p>Open the site locally (<code>npm run dev</code>) or on staging and walk through these routes in this order. This is the fastest way to see the whole delivery.</p>
+
+<table>
+<tr><th style="width:26%">Route / page</th><th style="width:16%">Status</th><th style="width:58%">What to look at</th></tr>
+<tr>
+  <td><code>/</code> (any page &mdash; footer)</td>
+  <td>Fixed</td>
+  <td>Bottom bar now shows four legal links: Impressum, Datenschutz, <strong>AGB</strong>, <strong>Widerrufsbelehrung</strong>. The e-mail address in the contact column now actually opens <code>info@uenal-gutachten.de</code> (it previously opened the FM inbox). No social-media icons are rendered. Both logo alt texts read &ldquo;Uenal Sachverst&auml;ndigenb&uuml;ro Logo&rdquo;.</td>
+</tr>
+<tr>
+  <td><code>/impressum</code></td>
+  <td>Replaced</td>
+  <td>Full new text. Heading under the title reads &ldquo;Angaben gem&auml;&szlig; &sect; 5 DDG&rdquo;. Contains Verantwortlicher (&sect; 18 Abs. 2 MStV), T&auml;tigkeitsgebiet, Qualifikation, Gerichtliche T&auml;tigkeit, Verbraucherstreitbeilegung, Haftung f&uuml;r Inhalte / Links, Urheberrecht. No EU dispute-resolution platform link anywhere. No &ldquo;Quelle: eRecht24&rdquo;. Browser tab title is now page-specific.</td>
+</tr>
+<tr>
+  <td><code>/datenschutz</code></td>
+  <td>Replaced</td>
+  <td>19 numbered sections, split into Teil A (website) and Teil B (expert work). Check section 8 for the third-party services list, section 13 for the third-country transfer statement, and section 17 &mdash; the Art. 21 DSGVO objection notice &mdash; which is now a clearly framed box with a border and shaded background, not body text.</td>
+</tr>
+<tr>
+  <td><code>/agb</code></td>
+  <td><strong>New page</strong></td>
+  <td>Did not exist before and returned the 404 / catch-all. Now serves &sect;&sect; 1&ndash;14 of the Allgemeine Gesch&auml;ftsbedingungen. &sect; 11 links through to the Widerrufsbelehrung, &sect; 12 links to the Datenschutzerkl&auml;rung, &sect; 13 states non-participation in consumer dispute resolution without any ODR reference.</td>
+</tr>
+<tr>
+  <td><code>/widerrufsbelehrung</code></td>
+  <td><strong>New page</strong></td>
+  <td>Did not exist before. Statutory structure: Widerrufsrecht, Folgen des Widerrufs, a framed notice on Wertersatz and premature expiry (&sect;&sect; 357 Abs. 8 / 356 Abs. 4 BGB), the Muster-Widerrufsformular in its own panel, and a closing section stating that court-appointed instructions carry no right of withdrawal.</td>
+</tr>
+<tr>
+  <td><code>/sitemap.xml</code></td>
+  <td>Fixed</td>
+  <td>The two new legal pages are now included alongside <code>/impressum</code> and <code>/datenschutz</code>.</td>
+</tr>
+<tr>
+  <td>Browser tab / page source on all four legal pages</td>
+  <td>Fixed</td>
+  <td>Each legal page now has its own <code>&lt;title&gt;</code> and its own meta description instead of inheriting the site-wide defaults.</td>
+</tr>
+</table>
+
+<h2>3. Pages newly created</h2>
+
+<h3>3.1 <code>/agb</code> &mdash; Allgemeine Gesch&auml;ftsbedingungen</h3>
+<p>Your diagnosis was exactly right: a component file existed and the legacy router listed the path, but the live App Router had no route for it, so the page was unreachable. The route now exists, the page carries the full &sect;&sect; 1&ndash;14 text, it has its own metadata, it is in the sitemap, and it is linked from the footer.</p>
+<p class="meta">Sections: &sect; 1 Geltungsbereich &middot; &sect; 2 Gegenstand und Grenzen der Leistung &middot; &sect; 3 Zustandekommen des Vertrages &middot; &sect; 4 Mitwirkungspflichten &middot; &sect; 5 Honorar, Auslagen und Zahlung &middot; &sect; 6 Fristen und Abnahme &middot; &sect; 7 Nutzungsrechte und Zweckbindung &middot; &sect; 8 Unparteilichkeit und Interessenkonflikte &middot; &sect; 9 Verschwiegenheit &middot; &sect; 10 Haftung &middot; &sect; 11 Widerrufsrecht f&uuml;r Verbraucher &middot; &sect; 12 Datenschutz &middot; &sect; 13 Verbraucherstreitbeilegung &middot; &sect; 14 Schlussbestimmungen.</p>
+
+<h3>3.2 <code>/widerrufsbelehrung</code> &mdash; Widerrufsbelehrung</h3>
+<p>Built as the full statutory scaffold, as agreed, so the page is legally usable today and the client's own text can simply replace it later. It follows the model instruction of Anlage 1 zu Art. 246a &sect; 1 Abs. 2 EGBGB, adapted for services, and includes the Muster-Widerrufsformular. There is a flag in the config (<code>widerrufsbelehrungFinalised</code>) that marks this as pending final client text and legal sign-off.</p>
+
+<h3>3.3 One central content file per site</h3>
+<p>All four legal documents now come out of <code>src/config/legalContent.ts</code>. Nothing legal is hard-coded in a page component any more. A second new file, <code>src/app/components/legal/LegalDocument.tsx</code>, does the rendering and contains no legal wording at all &mdash; only layout. That separation is what guarantees the four pages stay visually identical to the rest of the site and to each other.</p>
+<p>The qualification block in the Impressum is not duplicated text: it is derived from the existing <code>siteConfig.qualifications</code> data, which is marked in the code as the single source of truth. So a change there propagates to the Impressum automatically.</p>
+
+<h2>4. Pages whose content was replaced</h2>
+<p><code>/impressum</code> and <code>/datenschutz</code> were replaced in full from your source files. The design, hero, spacing, typography and dividers are unchanged &mdash; the same Tailwind classes the previous pages used were reproduced exactly.</p>
+<p class="meta"><strong>Datenschutz structure:</strong> 1 Verantwortlicher &middot; 2 Ansprechpartner &middot; <em>Teil A</em> &middot; 3 Hosting und Server-Logfiles &middot; 4 Bildoptimierung &middot; 5 Kontaktaufnahme &uuml;ber Formulare, Telefon und E-Mail &middot; 6 Blog &middot; 7 Cookies und vergleichbare Technologien &middot; 8 Eingebundene Dienste Dritter &middot; <em>Teil B</em> &middot; 9 Zwecke und Rechtsgrundlagen &middot; 10 Kategorien verarbeiteter Daten &middot; 11 Empf&auml;nger &middot; 12 Dauer der Speicherung &middot; 13 &Uuml;bermittlung in Drittl&auml;nder &middot; 14 Erforderlichkeit der Bereitstellung &middot; 15 Automatisierte Entscheidungsfindung &middot; 16 Ihre Rechte &middot; 17 Widerspruchsrecht nach Art. 21 DSGVO (framed box) &middot; 18 Beschwerderecht &middot; 19 &Auml;nderungen.</p>
+
+<h2>5. Fix list &mdash; item by item</h2>
+<p>Your numbering is kept so this maps one-to-one onto the brief.</p>
+
+<table>
+<tr><th style="width:5%">#</th><th style="width:37%">Item</th><th style="width:16%">Status</th><th style="width:42%">Where you can see it</th></tr>
+<tr><td>1</td><td>&sect; 5 TMG &rarr; &sect; 5 DDG, &sect;&sect; 7&ndash;10 TMG &rarr; DDG</td><td>Already done &mdash; verified</td><td><code>/impressum</code>. A search across the whole source tree returns no remaining TMG reference.</td></tr>
+<tr><td>2</td><td>Remove the EU Online Dispute Resolution platform (link + &ldquo;Verbraucherinformationen zur alternativen Streitschlichtung&rdquo; block), keep the non-participation sentence</td><td>Fixed</td><td><code>/impressum</code> and <code>/agb</code> &sect; 13. Heading is now &ldquo;Verbraucherstreitbeilegung&rdquo;; the non-participation statement under VSBG remains. No <code>ec.europa.eu</code> link exists anywhere in the source.</td></tr>
+<tr><td>3</td><td>Remove &ldquo;Quelle: eRecht24&rdquo;</td><td>Already done &mdash; verified</td><td>No occurrence anywhere in the source tree.</td></tr>
+<tr><td>4</td><td>Art. 21 DSGVO objection notice must be visually separated</td><td>Fixed</td><td><code>/datenschutz</code>, section 17: framed box (2px border, shaded background, bold text, own heading), deliberately set apart from the surrounding sections.</td></tr>
+<tr><td>5</td><td>Hide social icons that point to <code>#</code> behind a config flag</td><td>Already done &mdash; verified</td><td>Footer. The icons sit behind <code>siteConfig.showSocialLinks</code>, which is <code>false</code>, so nothing is rendered. Real URLs plus flipping that flag to <code>true</code> is all that is needed later.</td></tr>
+<tr><td>6</td><td>Move all legal content into one central file per site</td><td>Fixed</td><td><code>src/config/legalContent.ts</code> is now the only place legal wording exists on this site.</td></tr>
+<tr><td>12</td><td>Footer e-mail displayed <code>info@uenal-gutachten.de</code> but the mailto opened <code>info@uenal-fm.de</code></td><td>Fixed</td><td>Footer contact column. Both the visible text and the mailto now come from the same config value, so they cannot drift apart again. The currently commented-out &ldquo;E-Mail schreiben&rdquo; button was corrected too, so re-enabling it cannot reintroduce the bug.</td></tr>
+<tr><td>13</td><td>Logo alt text said &ldquo;Uenal Facility Management Logo&rdquo; / &ldquo;Uenal Immobilien Logo&rdquo;</td><td>Already done &mdash; verified</td><td>Header and footer both read &ldquo;Uenal Sachverst&auml;ndigenb&uuml;ro Logo&rdquo;. Neither old string exists in the source any more.</td></tr>
+<tr><td>14</td><td>Impressum and Datenschutz need their own title and meta description</td><td>Fixed</td><td>Browser tab and page source on <code>/impressum</code>, <code>/datenschutz</code> &mdash; and the two new pages got the same treatment. Both route files had to be converted from client components to server components for this to take effect.</td></tr>
+<tr><td>15</td><td>Datenschutz had no third-party services section at all (&ldquo;the biggest single gap&rdquo;)</td><td>Fixed, with open questions</td><td><code>/datenschutz</code> sections 3, 8 and 13. Section 8 now covers fonts, maps, web analytics, review and seal embeds, social plugins, Cloudflare Turnstile and the form submission path. See section 9 of this document for what still needs a client answer.</td></tr>
+<tr><td>16</td><td>Do <strong>not</strong> touch the &ldquo;Zertifizierter Sachverst&auml;ndiger&rdquo; wording</td><td>Respected</td><td>Not one occurrence was renamed &mdash; not in headings, footer keyword lists, route slugs, sitemap or meta tags. See section 7.</td></tr>
+<tr><td>17</td><td>Create <code>/widerrufsbelehrung</code> and link it in the footer</td><td>Fixed</td><td>New page plus footer link. Client text can be dropped in later without touching any component.</td></tr>
+</table>
+
+<h2>6. Already correct before this pass</h2>
+<p>Following your note that some items were already handled, each one was re-checked rather than re-done. Items 1, 3, 5 and 13 were already in place and were left untouched. The only thing added around them was verification: a full-source search for <code>TMG</code>, <code>eRecht24</code>, <code>ec.europa.eu</code>, <code>uenal-fm.de</code> and the old alt-text strings now returns nothing except two code comments that deliberately document <em>why</em> the ODR platform is absent.</p>
+
+<h2>7. Deliberately not touched</h2>
+<div class="box">
+<p><span class="tag">Frozen until certification is confirmed</span></p>
+<p>The phrase &ldquo;Zertifizierter Sachverst&auml;ndiger&rdquo; was left exactly as it was, in every location. A source-wide search finds it in 15 places across 8 files: the footer keyword block and company blurb, the regional page template, the home page, the About page, the route table, the route map, the sitemap keyword list and the SEO metadata helper. None of these were edited, renamed or re-slugged. When the certification status is settled, this is the complete list of places to revisit.</p>
+</div>
+
+<h2>8. Two deliberate deviations from the source .md files</h2>
+<p>Both are cases where following the supplied text literally would have published a statement that is untrue for this codebase. They are also documented as comments in the code itself.</p>
+<ol>
+<li><strong>Cookie section (Datenschutz section 7).</strong> The source text described a consent banner. This website has no consent banner and sets only technically necessary cookies, so the section was rewritten to say exactly that. Publishing the original wording would have described a mechanism that does not exist. If a banner is added later, this section must be rewritten again.</li>
+<li><strong>Liability sections kept in the Impressum.</strong> <code>02_Impressum.md</code> omits Haftung f&uuml;r Inhalte, Haftung f&uuml;r Links and Urheberrecht, but your fix item 1 refers to &sect;&sect; 7&ndash;10 DDG, which only appear in those sections. They were therefore retained, already worded under DDG rather than TMG.</li>
+</ol>
+
+<h2>9. New finding: services that were not in the questionnaire</h2>
+<p>While verifying, two third-party data flows turned up in the code that are not mentioned anywhere in the client questionnaire. Both are now disclosed in the Datenschutzerkl&auml;rung, and both raise questions the client needs to answer.</p>
+<ul>
+<li><strong>Cloudflare Turnstile</strong> is live on the contact page and on the home-page contact form. It processes IP address and browser/device data and involves a US provider. It is now disclosed in section 8 with Art. 6 Abs. 1 lit. f DSGVO as the legal basis and spam defence as the legitimate interest, and Cloudflare is named in section 13 as a third-country transfer.</li>
+<li><strong>Form submissions</strong> do not go straight to an inbox &mdash; they are posted to a separate hosted API which then forwards them. That is a processor relationship under Art. 28 DSGVO. Section 8 now describes the flow and offers phone and post as alternatives; the provider's name is held back until confirmed.</li>
+</ul>
+<div class="box">
+<p><span class="tag">Questions to add to the client questionnaire</span></p>
+<p>1. Is there a data processing agreement (AVV) in place with Cloudflare for Turnstile?<br>
+2. Who operates the form API, and where are its servers located?<br>
+3. Is there an AVV with that operator, and what is the deletion period for submitted form data?<br>
+4. Who is the hosting provider, with full address and country, and what is the log file retention period?<br>
+5. Is Microsoft 365 (or any other non-EU service) used for mail, calendar or file storage?</p>
+</div>
+
+<h2>10. Open items waiting on client answers</h2>
+<p>As agreed, nothing is published as a placeholder. Every unconfirmed value sits in one clearly commented block at the top of the central content file, and each section that depends on one is simply not rendered while its value is empty. Filling in the value is enough to make the section appear &mdash; no component changes needed.</p>
+
+<table>
+<tr><th style="width:26%">Config value</th><th style="width:36%">What it unlocks</th><th style="width:38%">Currently on the site</th></tr>
+<tr><td><code>ustIdNr</code></td><td>Impressum &ldquo;Umsatzsteuer&rdquo; section and AGB &sect; 5 (4)</td><td>Both omitted entirely. Correct if the Kleinunternehmerregelung applies. The tax number must never be published.</td></tr>
+<tr><td><code>berufshaftpflicht</code></td><td>Impressum &ldquo;Berufshaftpflichtversicherung&rdquo; section and the insurer detail in AGB &sect; 10 (5)</td><td>Impressum section omitted; AGB &sect; 10 (5) shows the general sentence without insurer or sum insured. This is the item blocking final Impressum sign-off.</td></tr>
+<tr><td><code>hostingProvider</code></td><td>Naming the host in Datenschutz section 3</td><td>Section 3 renders, but without the provider's name. Vercel is the likely answer given the tech stack, but it has to be confirmed.</td></tr>
+<tr><td><code>logfileRetention</code></td><td>The log file deletion period in Datenschutz section 3</td><td>Sentence omitted. Usually between 7 and 30 days.</td></tr>
+<tr><td><code>formBackendOperator</code></td><td>Naming the form API operator in Datenschutz section 8</td><td>The processing is described; the operator is not named yet.</td></tr>
+<tr><td><code>cloudflareDpaInPlace</code></td><td>Confirmation that the Cloudflare AVV exists</td><td>Tracking flag only, no text on the site. Needs a documented answer.</td></tr>
+<tr><td><code>thirdCountryTransfer</code></td><td>Additional non-EU services in Datenschutz section 13</td><td>Section 13 is live and names Cloudflare, because that one is proven in the code. Any further providers get appended once confirmed.</td></tr>
+<tr><td><code>privacyEmail</code></td><td>A dedicated data-protection mailbox</td><td>Falls back to the general address, which is legally fine. Only change this if a separate mailbox actually exists.</td></tr>
+<tr><td><code>widerrufsbelehrungFinalised</code></td><td>Marks the withdrawal text as final</td><td>Still <code>false</code>. The statutory model text is live; the client's own version and a legal review are pending.</td></tr>
+</table>
+
+<h2>11. Checklist for the Facility Management site</h2>
+<p>That project folder was not connected, so nothing there was changed. The same six site-wide items apply, and they are worth doing in this order:</p>
+<ol>
+<li>Replace every &sect; 5 TMG reference with &sect; 5 DDG, and &sect;&sect; 7&ndash;10 TMG with &sect;&sect; 7&ndash;10 DDG.</li>
+<li>Remove the EU Online Dispute Resolution platform link and the &ldquo;Verbraucherinformationen zur alternativen Streitschlichtung&rdquo; block, keeping the sentence about not participating in dispute resolution.</li>
+<li>Remove every &ldquo;Quelle: eRecht24&rdquo; credit.</li>
+<li>Give the Art. 21 DSGVO objection notice its own framed, shaded box.</li>
+<li>Put placeholder social icons behind a config flag until real profile URLs exist.</li>
+<li>Move all legal wording into one central content file, mirroring the structure now used on the SV site.</li>
+</ol>
+<p>Two more worth checking there, since they were real bugs here: that displayed e-mail addresses and their mailto targets match, and that logo alt texts name the right company.</p>
+
+<h2>12. Technical appendix</h2>
+
+<h3>12.1 Files created</h3>
+<ul>
+<li><code>src/config/legalContent.ts</code> &mdash; all four legal documents, the pending-disclosure block and the content types.</li>
+<li><code>src/app/components/legal/LegalDocument.tsx</code> &mdash; shared renderer, layout only.</li>
+<li><code>src/app/agb/page.tsx</code> &mdash; the route that was missing.</li>
+<li><code>src/app/widerrufsbelehrung/page.tsx</code> and <code>src/app/pages/Widerrufsbelehrung.tsx</code>.</li>
+<li><code>docs/Uenal-SV-Legal-Update-2026-08-26.html</code> &mdash; this document.</li>
+</ul>
+
+<h3>12.2 Files changed</h3>
+<ul>
+<li><code>src/app/pages/Impressum.tsx</code>, <code>Datenschutz.tsx</code>, <code>AGB.tsx</code> &mdash; reduced to thin wrappers around the shared renderer.</li>
+<li><code>src/app/impressum/page.tsx</code>, <code>src/app/datenschutz/page.tsx</code> &mdash; converted to server components so page-level metadata works.</li>
+<li><code>src/app/layout/Footer.tsx</code> &mdash; mailto fix, four legal links, wrapping bottom bar.</li>
+<li><code>src/app/routes.tsx</code> &mdash; legacy router kept in sync with the new page.</li>
+<li><code>src/app/sitemap.ts</code> &mdash; two new legal routes added.</li>
+</ul>
+
+<h3>12.3 How to edit legal text from now on</h3>
+<p>Open <code>src/config/legalContent.ts</code> and edit the text of the relevant block. Do not edit the page components: they contain no wording. Content is expressed as typed blocks (paragraph, list, subheading, address, legal-basis note, framed callout), so a new paragraph is one entry in an array and it will automatically match the existing typography. Inline <code>**bold**</code> and <code>[link text](/target)</code> markup is supported and is parsed safely, without raw HTML injection.</p>
+
+<h3>12.4 Verification status &mdash; please read</h3>
+<div class="box">
+<p><span class="tag">One step could not be completed here</span></p>
+<p>The Linux sandbox in this environment failed to start, so <code>npm run build</code>, <code>tsc</code> and the dev server could not be run. All checking was done by reading and searching the source: imports and route paths resolve, the new static routes take precedence over the dynamic catch-all, the conditional sections are type-safe, and the design classes match the existing pages.</p>
+<p>Because <code>next.config.mjs</code> sets <code>typescript.ignoreBuildErrors</code> and <code>eslint.ignoreDuringBuilds</code> to <code>true</code>, a type error would not fail your build &mdash; it would ship silently. Please run <code>npm run build</code> and then <code>npx tsc --noEmit</code> locally once, and walk the seven routes in section 2.</p>
+</div>
+
+<h3>12.5 One pre-existing issue, left as found</h3>
+<p>Footer links use a hover colour that is almost the same as the black footer background, so they visually disappear on hover. This predates this work and affects the whole footer, not just the legal links. It was not changed, because you asked that the existing design not be altered &mdash; the new links deliberately use the same class as the old ones for consistency. It is a one-line fix whenever you want it.</p>
+
+<p class="footer">Prepared for HP &middot; 26 August 2026 &middot; Uenal Sachverst&auml;ndigenb&uuml;ro legal-compliance overhaul &middot; SV site only</p>
+
+</body>
+</html>

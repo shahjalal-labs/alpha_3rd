@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Uenal Sachverständigenbüro — Tracker Status Report, 26 August 2026</title>
+<style>
+  @page { size: A4; margin: 2cm; }
+  body { font-family: Calibri, "Segoe UI", Arial, sans-serif; font-size: 11pt; line-height: 1.45; color: #1a1a1a; max-width: 20cm; margin: 0 auto; padding: 1cm; }
+  h1 { font-size: 20pt; margin: 0 0 4pt; border-bottom: 2pt solid #000; padding-bottom: 6pt; }
+  h2 { font-size: 14pt; margin: 22pt 0 6pt; border-bottom: 1pt solid #999; padding-bottom: 3pt; }
+  h3 { font-size: 12pt; margin: 14pt 0 4pt; }
+  p { margin: 0 0 8pt; }
+  .sub { color: #555; font-size: 10pt; margin-bottom: 14pt; }
+  table { border-collapse: collapse; width: 100%; margin: 8pt 0 14pt; font-size: 8.5pt; }
+  th, td { border: 0.75pt solid #999; padding: 4pt 5pt; text-align: left; vertical-align: top; }
+  th { background: #ebebeb; font-weight: bold; }
+  code { font-family: Consolas, "Courier New", monospace; font-size: 8.5pt; background: #f2f2f2; padding: 0 2pt; }
+  .box { border: 1pt solid #666; background: #f7f7f7; padding: 8pt 10pt; margin: 10pt 0; }
+  .box.warn { border-left: 4pt solid #000; background: #f0f0f0; }
+  .st { font-weight: bold; white-space: nowrap; font-size: 8pt; }
+  ul, ol { margin: 0 0 8pt; padding-left: 18pt; }
+  li { margin-bottom: 3pt; }
+  .quote { border-left: 3pt solid #666; padding-left: 10pt; margin: 8pt 0; font-style: italic; color: #333; }
+  .small { font-size: 9pt; color: #555; }
+</style>
+</head>
+<body>
+
+<h1>Uenal Sachverständigenbüro — Tracker Status Report</h1>
+<p class="sub">Site: uenal-gutachten.de &nbsp;•&nbsp; Report date: 26 August 2026 &nbsp;•&nbsp; Basis: the client's five emails of this round, the shared tracker, and a full re-read of the current codebase</p>
+
+<h2>1. Two access limitations you should know before reading anything else</h2>
+
+<div class="box warn">
+<p><strong>The Google Sheet could not be edited from here.</strong> <code>docs.google.com</code> is not on this environment's network allowlist, so neither reading nor writing the tracker was possible. Instead of a direct edit, a ready-to-import file is delivered alongside this document: <code>docs/Uenal-SV-Tracker-Status-2026-08-26.csv</code>. In the sheet, use <em>File → Import → Upload</em> and choose "Insert new sheet" — that gives you a dated status sheet next to your original without overwriting it. Every row carries the status, the file-and-line evidence, the owner and the next action.</p>
+<p style="margin-bottom:0"><strong>No build and no browser test could be run.</strong> The Linux sandbox for this session failed to start (insufficient disk space on the host), so <code>npx tsc --noEmit</code>, <code>npm run build</code> and a live page render were all unavailable. <strong>Every status below therefore comes from static reading of the source code</strong> — grep plus reading the files in full. That is reliable for "does this string exist", "is this component mounted", "does this route export metadata" and "is this value in the config". It is not a substitute for looking at the rendered HTML of a production page, and two items (SV-027 duplicate steps and SV-028 unmounted FAQ answers) should be confirmed once in <em>View Source</em> before they are ticked off.</p>
+</div>
+
+<h2>2. Headline: where the project actually stands</h2>
+
+<p>Of the 45 tracker lines examined, <strong>17 are finished</strong> and need nothing further, <strong>4 more are finished on our side and only wait on information from the client</strong>, <strong>9 are partially done</strong> (the mechanism exists but does not cover every place it should), <strong>11 are open</strong>, <strong>5 (the SEC lines) cannot be statused because their text lives only in the inaccessible sheet</strong>, and <strong>1 is superseded</strong> by work already delivered.</p>
+
+<p>The single most important correction to the earlier picture: <strong>the site is not finished, and the legal pages being finished does not make it compliant.</strong> The legal documents themselves — Impressum, Datenschutzerklärung, AGB, Widerrufsbelehrung — are in good shape. What remains is spread across the marketing pages: the standalone use of "zertifiziert" still appears in seven places, one of which is a heading in the footer and therefore on all 600-plus pages; the regional pages render a headline that violates rule 3 because of a lookup bug; and several sections that were supposed to be gone are only hidden with CSS and are still in the HTML that Google reads.</p>
+
+<p>The three non-negotiables are in a good state. <strong>No TÜV logo exists anywhere in the project</strong> — there is no such image file. <strong>None of the three forbidden phrases appear</strong> ("TÜV-zertifiziert", "TÜV-geprüft", "TÜV-Sachverständiger": zero occurrences each). The only TÜV mention in the whole codebase is the one line that is supposed to be there, the TRA further-training entry, and it is text only. The <strong>qualification block matches the mandated wording character for character</strong>, including both certificate numbers, the check digit and both validity dates, and it lives in one central file. Rule 3 — "zertifiziert" never standing alone — is the one that is not yet met, and section 4 lists exactly where.</p>
+
+<h2>3. Line-by-line status of every tracker row</h2>
+
+<p class="small">Status vocabulary: <strong>DONE</strong> = verified in the code, nothing outstanding. <strong>DONE (pending X)</strong> = our work is complete, one client-supplied fact is missing and is deliberately omitted rather than shown as a placeholder. <strong>PARTIAL</strong> = the correct mechanism exists but does not cover every location. <strong>OPEN</strong> = not started. <strong>NEED INPUT</strong> = cannot be assessed without information only you have. <strong>SUPERSEDED</strong> = the finding no longer describes the code.</p>
+
+<h3>3.1 Items that are finished</h3>
+
+<table>
+<tr><th style="width:8%">ID</th><th style="width:26%">Item</th><th style="width:10%">Status</th><th>What was verified</th></tr>
+<tr><td>SV-007</td><td>Court work wording</td><td class="st">DONE</td><td>The sentence sits in the central config exactly as you specified it, and is rendered from there in the Impressum and on the About page. "tätig für" is used; "beauftragter" and "gelisteter Sachverständiger" return zero hits. Osterholz, Stade, Rotenburg (Wümme) and Gifhorn were added to the Tätigkeitsgebiet line. <strong>No new city pages were created.</strong></td></tr>
+<tr><td>QUAL</td><td>Qualification block, exact text, one central file</td><td class="st">DONE</td><td>All four entries, in your order, with the issuing body attached to each, in <code>src/config/siteConfig.ts</code> lines 39–70. "Weiterbildung" is a separate heading with its own item list, not merged into "Qualifikation". A single component renders it, so the next change is one file. One deviation to fix is noted in 3.3.</td></tr>
+<tr><td>SEALS</td><td>DGuSV and EWIVS only, side by side, identical treatment</td><td class="st">DONE</td><td>Both seals in the config with the alt texts exactly as dictated — "DGuSV Siegel 2026" and "EWIVS Certification – Personenzertifikat EU/A-001". Rendered at the same size in the same row. No text was copied out of the seal artwork into an alt attribute.</td></tr>
+<tr><td>TUV</td><td>No TÜV logo; three phrases never used</td><td class="st">DONE</td><td>No TÜV image asset exists. Zero hits for each of the three forbidden phrases across the entire source tree. The one TÜV string is the required TRA training line.</td></tr>
+<tr><td>ODR</td><td>Remove the EU platform link entirely</td><td class="st">DONE</td><td>Zero hits for the platform URL. The sentence stating non-participation in consumer arbitration is retained, in the Impressum and in AGB § 13. <em>Caveat: uenal-immobilien.de and uenal-fm.de could not be checked — those project folders are not connected to this session.</em></td></tr>
+<tr><td>DDG</td><td>TMG references replaced</td><td class="st">DONE</td><td>Zero occurrences of "TMG" anywhere. The Impressum cites § 5 DDG, and the liability paragraphs are worded to the DDG.</td></tr>
+<tr><td>TAX</td><td>Do not publish the Steuernummer</td><td class="st">DONE</td><td>No Steuernummer anywhere. The VAT section is configured to be omitted entirely while no VAT ID exists, rather than printed empty.</td></tr>
+<tr><td>AGB</td><td>The missing /agb page</td><td class="st">DONE</td><td>The route genuinely did not exist before; it does now, with §§ 1–14, its own title and meta description, a footer link and a sitemap entry.</td></tr>
+<tr><td>SV-037</td><td>Visible "Quelle: eRecht24" note</td><td class="st">DONE</td><td>Zero occurrences of "eRecht24".</td></tr>
+<tr><td>SV-038</td><td>Certificate expiry recorded in the config</td><td class="st">DONE</td><td>31.12.2026 sits next to the DGuSV entry and next to the DGuSV seal; 11.06.2028 next to the EWIVS entries. An expired seal can no longer sit unnoticed, because the date is in the same file the text comes from.</td></tr>
+<tr><td>MAIL</td><td>Footer displayed one address, linked another</td><td class="st">DONE</td><td>Label and mailto now read the same value from the config, so they cannot drift apart again.</td></tr>
+<tr><td>ALT</td><td>Logo alt text named the wrong company</td><td class="st">DONE</td><td>Header and footer both read "Uenal Sachverständigenbüro Logo"; the old strings return zero hits.</td></tr>
+<tr><td>META</td><td>Own title and description for the legal pages</td><td class="st">DONE</td><td>All four legal routes export their own metadata. Two of them had to be converted from client to server components for this to take effect at all.</td></tr>
+<tr><td>SV-015</td><td>Duplicate call CTA in the hero</td><td class="st">LIKELY DONE</td><td>The hero now carries one "Jetzt anrufen" and one "Gutachten anfragen". Please confirm this is what you meant; the remaining duplication elsewhere on the page is SV-036.</td></tr>
+<tr><td>SV-035</td><td>Confirm canonical / OG / JSON-LD missing</td><td class="st">SUPERSEDED</td><td>The mechanism now exists — canonical, OpenGraph, Twitter and a ProfessionalService JSON-LD block are all produced. The remaining gap is route coverage, not absence; tracked under SV-023.</td></tr>
+</table>
+
+<h3>3.2 Finished on our side, waiting on you</h3>
+
+<table>
+<tr><th style="width:8%">ID</th><th style="width:26%">Item</th><th style="width:10%">Status</th><th>What is missing</th></tr>
+<tr><td>SV-008</td><td>Impressum correction; Berufshaftpflicht block</td><td class="st">DONE (insurance pending)</td><td>The corrected Impressum is live now, as you asked. The heading is "Qualifikation", not "Berufsbezeichnung". The insurance block is <em>omitted</em>, not shown empty — the moment you send insurer, address, sum insured and territorial scope, one config value makes it appear. <strong>Due end of month.</strong></td></tr>
+<tr><td>SV-009</td><td>Datenschutzerklärung rewrite</td><td class="st">DONE (3 facts pending)</td><td>19 sections, the Teil A / Teil B split, the Art. 21 objection notice in its own framed box (Art. 21 Abs. 4 requires visual separation), a third-party-services section and a third-country-transfer section. Three facts are still open and each currently suppresses its own paragraph: hosting provider, logfile retention period, and the operator of the form API. See section 6.</td></tr>
+<tr><td>SV-029</td><td>Social links behind a config flag</td><td class="st">DONE (URLs pending)</td><td>Nothing is rendered today because the flag is off. Nothing was deleted, so switching them on later is a config entry, not a code change — exactly as you required. Two things remain: your four profile URLs, and wiring those URLs into the icons, whose href is still <code>#</code>. <strong>Due end of month.</strong></td></tr>
+<tr><td>SV-017</td><td>Rating value in config, badge links to the profile</td><td class="st">PARTIAL (URL pending)</td><td>The value, the label and a placeholder maps URL are in the config, but <em>no component reads them yet</em> — the homepage still hardcodes "5.0 auf Google" and it is not a link. Needs your Google Business Profile URL, then a small wiring change.</td></tr>
+<tr><td>WIDERRUF</td><td>New /widerrufsbelehrung page</td><td class="st">DONE (final text pending)</td><td>The route exists with the statutory model instruction and the Muster-Widerrufsformular, and is linked in the footer and the sitemap. It is flagged in the config as not yet final — please have the wording reviewed before sign-off, since a defective withdrawal instruction extends the withdrawal period.</td></tr>
+</table>
+
+<h3>3.3 Partially done — the mechanism is right, the coverage is not</h3>
+
+<table>
+<tr><th style="width:8%">ID</th><th style="width:24%">Item</th><th style="width:10%">Status</th><th>Precisely what is still wrong</th></tr>
+<tr><td>SV-004</td><td>Rule 3, and Immobilienwertermittlung vs Immobilienbewertung</td><td class="st">PARTIAL</td><td>"Zertifiziertes Mitglied im Deutschen Gutachter und Sachverständigen Verband" is gone — zero hits. But <strong>"zertifiziert" still stands alone in seven places</strong>: "Zertifizierte Kompetenz" on the homepage; <strong>"Zertifizierter Sachverständiger" as a heading in the footer, which puts it on every page of the site</strong>; "Zertifizierte Fachkompetenz" on the regional page template; the regional page fallback headline (see NEW-01, 26 pages); and four occurrences in the blog template. Separately, "Immobilienbewertung" appears 36 times in 14 files, including the site tagline, which feeds into every page title.</td></tr>
+<tr><td>SV-014</td><td>Umlaut transliteration</td><td class="st">PARTIAL</td><td>The route map, the sitemap and the permanent redirects are all correct. But two files still build links from the display spellings, so <strong>136 of 520 internal links still contain raw umlauts</strong>. The fix is to apply the existing transliteration helper in those two places.</td></tr>
+<tr><td>SV-023</td><td>Canonical, OpenGraph, JSON-LD</td><td class="st">PARTIAL</td><td>The helper produces everything correctly and the JSON-LD is injected once site-wide. However <strong>only five routes call it</strong>. Every other route — including all 520 regional pages — inherits the root layout's metadata and therefore <strong>declares the homepage as its canonical</strong>. That is worse than having no canonical at all, because it actively tells Google to drop those pages. Two supporting defects: the OG image URL 404s, and no <code>metadataBase</code> is set (NEW-02).</td></tr>
+<tr><td>SV-030</td><td>Oversized images, missing <code>sizes</code></td><td class="st">PARTIAL</td><td><strong>Both seals are correct</strong> — you asked for that to be right from the start, and it is: explicit dimensions and a <code>sizes</code> attribute in both places they appear. The logo is not: neither usage declares dimensions or <code>sizes</code>, and the source PNG is 7000×4636, so it resolves to a 3840-pixel-wide request on a element roughly 200 pixels wide. One footer usage declares an aspect ratio that does not match the file. The carousel image is 3107 pixels wide with no <code>sizes</code> (removed along with SV-003).</td></tr>
+<tr><td>SV-031</td><td>DGuSV seal alt text and filename</td><td class="st">MOSTLY DONE</td><td>The alt text is now exactly "DGuSV Siegel 2026" and the old string returns zero hits. Two leftovers: the file itself has not been renamed, and the homepage still hardcodes its own copy of the alt text instead of reading the config — so the config is not yet the single source of truth for that string.</td></tr>
+<tr><td>SV-001 / SV-033</td><td>Contradictory founding year and experience claims</td><td class="st">PARTIAL</td><td>The offending sections were <strong>hidden with CSS, not removed</strong>. "5+ Jahre Erfahrung" and "Seit unserer Gründung im Jahr 2021" are still in the server-rendered HTML, invisible to a visitor but fully visible to a crawler and to anyone reading the source — alongside "GEGRÜNDET 2025", which is visible. <em>One correction to the tracker: there is no "SEIT 2025" string in the code; the visible badge reads "GEGRÜNDET 2025".</em> Decide the one true founding year, keep it only in the config, and delete the legacy blocks.</td></tr>
+<tr><td>SV-003</td><td>Remove the customer logo carousel</td><td class="st">PARTIAL</td><td>Same pattern: the carousel is wrapped in a hidden container but still mounts, still autoplays, and still loads all six logos on every homepage visit. Delete the call and the import.</td></tr>
+<tr><td>QUAL</td><td>Qualification block — one deviation</td><td class="st">PARTIAL</td><td>In the Impressum specifically, "Weiterbildung" is emitted as a sub-heading <em>inside</em> the "Qualifikation" section. You were explicit that the two must never be merged, so this needs to become its own top-level section there. Also, several pages still hardcode credential prose in their own copy instead of reading the config — that is the "touching 600 pages twice" risk you wanted eliminated.</td></tr>
+</table>
+
+<h3>3.4 Open — not started</h3>
+
+<table>
+<tr><th style="width:8%">ID</th><th style="width:24%">Item</th><th style="width:8%">Prio</th><th>Finding and fix</th></tr>
+<tr><td>SV-027</td><td>Process steps 01–06 appear twice</td><td>HIGH</td><td>Confirmed: a mobile card and a desktop card are both built and both rendered for every step, so the page contains 12 step blocks and 12 sub-headings where there should be 6. Neither copy carries <code>aria-hidden</code>, so a screen reader reads the whole sequence twice. The fix is one card plus breakpoint logic on the placement wrapper only.</td></tr>
+<tr><td>SV-028</td><td>FAQ answers absent from the server HTML</td><td>HIGH</td><td>Confirmed at the library level: the accordion component only renders an answer while its panel is open, and no panel is open by default, so <strong>no answer text exists in the delivered HTML</strong>. Your conclusion is right — FAQPage structured data would not be permissible in that state, because the marked-up answer must be visible content on the page. Fix order: render the answers always and hide them with CSS (or move to native <code>&lt;details&gt;</code>), <em>then</em> add the JSON-LD. Note the review gate in section 7 before any FAQ text is touched.</td></tr>
+<tr><td>SV-034</td><td>Carousel captions do not match the files</td><td>MED</td><td>Confirmed on two entries, and the caption is reused as the alt text, so the wrong company name is also what assistive technology announces. This disappears when the carousel is deleted under SV-003. <em>The uenal-fm.de check you asked for could not be done — that folder is not connected here.</em></td></tr>
+<tr><td>SV-036</td><td>Repeated "Jetzt anrufen" CTA</td><td>LOW</td><td>Worse than reported: there are <strong>four</strong> on the desktop homepage — sticky header, hero, a floating button fixed bottom-right that is mounted site-wide, and the closing section — all pointing at the same number, which also appears in the footer. Recommend dropping the floating button, since it is the one that overlaps content.</td></tr>
+</table>
+
+<h3>3.5 The SEC lines</h3>
+
+<p>SEC-01 through SEC-05 are marked <strong>NEED INPUT</strong>, not open or done. Their wording exists only in the Google Sheet, which could not be opened from here, and I will not guess at five security requirements. Please paste the five lines as text and they will be statused in the next round.</p>
+
+<p>What can be stated meanwhile, from reading the build configuration: the site already sends <strong>HTTP Strict Transport Security</strong> with a one-year max-age including subdomains, <strong>X-Frame-Options: SAMEORIGIN</strong>, <strong>X-Content-Type-Options: nosniff</strong>, <strong>Referrer-Policy: strict-origin-when-cross-origin</strong>, and a <strong>full Content-Security-Policy</strong> whose allowlist is narrow — the only external origins permitted are Cloudflare's challenge endpoint and the form API. If SEC-01 to SEC-05 are the usual header set, most of it is already in place and the remaining question is whether you also want <code>Permissions-Policy</code> and a <code>preload</code> submission for HSTS. You noted these five are entirely on the implementation side with no client dependency, and that is consistent with what I see.</p>
+
+<h2>4. SV-021 — the technology disclosure, delivered now</h2>
+
+<p>You asked for this in parallel with the first fixes rather than after them, because the Datenschutzerklärung cannot be finalised without it. Here is the complete inventory, from the dependency manifest and the source, not from assumption.</p>
+
+<h3>Framework and rendering</h3>
+<p>Next.js 15.3.8 with the App Router, React 19, TypeScript, Tailwind CSS for styling. Pages are server-rendered. UI primitives come from Radix (via shadcn/ui) and icons from a local icon package. Animation uses the <code>motion</code> library. Two carousel libraries are present, <code>react-slick</code> and <code>embla</code>. <strong>All of these run in the browser or on the server and set no cookies and make no external requests.</strong></p>
+
+<h3>What actually leaves the visitor's browser</h3>
+<p>Only two external destinations, and both are now disclosed in the Datenschutzerklärung:</p>
+<ul>
+<li><strong>Cloudflare Turnstile</strong> (Cloudflare, Inc., 101 Townsend Street, San Francisco, CA 94107, USA) — the spam protection on the contact forms. The widget script loads from Cloudflare's domain, so Cloudflare receives the visitor's IP address whenever a form page is opened. Disclosed under section 8 of the Datenschutzerklärung on the legal basis of Art. 6(1)(f) DSGVO with the legitimate interest named, and again in section 13 as a possible third-country transfer under the EU-US Data Privacy Framework, with standard contractual clauses as the fallback.</li>
+<li><strong>An external form API</strong> at <code>alpa-backend-api.vercel.app</code>, with two endpoints — one for the general contact form and one for the valuation enquiry form. Everything a visitor types into a form is transmitted through this interface. Disclosed in section 8 as processing by a processor under Art. 28 DSGVO.</li>
+</ul>
+
+<h3>What is <em>not</em> there — equally important for the privacy policy</h3>
+<ul>
+<li><strong>No analytics of any kind.</strong> No Google Analytics, no Plausible, no Matomo, no Vercel Analytics, no Meta or LinkedIn pixel.</li>
+<li><strong>No Google Fonts and no other font CDN.</strong> Fonts are served from the site's own domain — this is the single most common Abmahnung trigger on German sites and it is correctly avoided.</li>
+<li><strong>No embedded map</strong>, no YouTube or Vimeo embed, no social plugin, no chat widget.</li>
+<li><strong>No cookie banner, because no consent-requiring cookie is set.</strong> The Datenschutzerklärung states this explicitly rather than staying silent, which is the defensible position.</li>
+<li>Reviews and seals are static images and static text — nothing is fetched from Google at runtime.</li>
+<li>Two review components exist in the codebase but are <em>not reachable from any page</em>. They are dead code and should be deleted; one of them links to the Facility Management business rather than the Sachverständigenbüro (NEW-06).</li>
+</ul>
+
+<div class="box">
+<p style="margin-bottom:4pt"><strong>Four questions that flow directly from this inventory, and that block final sign-off on the Datenschutzerklärung:</strong></p>
+<ol style="margin-bottom:0">
+<li><strong>Who hosts the site?</strong> Almost certainly Vercel given the toolchain, but this must be stated as fact, not inferred. Needed: company, address, and whether a data processing agreement is in place.</li>
+<li><strong>Who operates the form API</strong> at that address — your own infrastructure or an agency's? A processing agreement under Art. 28 DSGVO is required either way, and the operator has to be nameable.</li>
+<li><strong>How long are server logfiles kept?</strong> A concrete retention period is required; "as long as necessary" is not sufficient.</li>
+<li><strong>Is there a data processing agreement with Cloudflare</strong>, and is the Cloudflare entity used the US parent or the European subsidiary? This changes how section 13 must be worded.</li>
+</ol>
+</div>
+
+<h2>5. The FAQ answer you asked to see before anything in the FAQ is touched</h2>
+
+<p>Nothing in the FAQ has been changed. Here is the current answer verbatim, source and translation:</p>
+
+<div class="box">
+<p><strong>Question:</strong> Kann ich ein Gutachten für steuerliche Zwecke verwenden?</p>
+<p style="margin-bottom:0"><strong>Current answer, exactly as it stands on the site:</strong> „Ja. Unsere Gutachten können als Grundlage für steuerliche Bewertungen gegenüber dem Finanzamt dienen – etwa bei Erbschaft oder Schenkung."</p>
+</div>
+
+<p class="small"><em>In English:</em> "Yes. Our reports can serve as a basis for tax valuations vis-à-vis the tax office — for example in cases of inheritance or gift."</p>
+
+<p>One observation, offered for your review rather than acted on: the answer opens with an unqualified "Yes", while whether the tax office accepts a report depends on the report type and on the individual case. If you want that nuance added, please send the replacement wording and it will be inserted unchanged. <strong>The rest of the FAQ work (SV-028) is held until you release this text</strong>, because adding FAQPage structured data would republish this answer as machine-readable content, and that should not happen before you have signed it off.</p>
+
+<h2>6. Findings that are not in the tracker</h2>
+
+<p>These came out of the code review and have provisional IDs so they cannot collide with your own numbering.</p>
+
+<table>
+<tr><th style="width:8%">ID</th><th style="width:8%">Prio</th><th>Finding</th></tr>
+<tr><td>NEW-01</td><td>HIGH</td><td><strong>The regional pages render a headline that breaks rule 3, because of a lookup bug.</strong> The routing layer supplies the transliterated keyword ("sachverstaendiger"), but the page template looks it up in a table keyed with the umlaut spelling ("sachverständiger"). The lookup misses, so a generic fallback title-cases the slug — producing headlines such as <em>"Zertifizierter Sachverstaendiger in Apen"</em>. That is both a rule-3 violation on 26 pages and a misspelling in an H1. <strong>14 of the 20 keywords hit this fallback</strong>, so the majority of the 520 regional pages are also running on generic rather than intended copy. This is the highest-value single fix in the list: it repairs a compliance breach and a substantial SEO defect at once.</td></tr>
+<tr><td>NEW-02</td><td>MED</td><td><strong>The social-sharing image 404s.</strong> Every page declares an OpenGraph and Twitter image at a path that does not exist in the public folder, and the declared 1200×630 does not match any real file. No <code>metadataBase</code> is set either, which makes the generated URLs fragile. Effect: links shared to WhatsApp, LinkedIn or Facebook show no preview image.</td></tr>
+<tr><td>NEW-03</td><td>HIGH</td><td><strong>The footer emits 136 raw-umlaut links on every single page.</strong> Same root cause as SV-014, listed separately because the footer is on every page, so this is the largest share of the crawl surface.</td></tr>
+<tr><td>NEW-04</td><td>MED</td><td><strong>Two-word city slugs contain a literal space.</strong> One page builds links like <code>/verkehrswertgutachten-bad zwischenahn</code> — a space in a URL path. These links are broken.</td></tr>
+<tr><td>NEW-05</td><td>HIGH</td><td><strong>Hidden is not deleted.</strong> Three homepage blocks are hidden with CSS but remain in the HTML: the old Facility Management figures including "5+ Jahre Erfahrung", the 2021 founding story, and a set of testimonials that do not correspond to identifiable clients. All three are readable in <em>View Source</em> and indexable. The testimonials in particular carry their own risk under competition law if they are not attributable to real customers.</td></tr>
+<tr><td>NEW-06</td><td>MED</td><td><strong>Dead review component points at the wrong business.</strong> A reviews carousel hardcodes a 5.0 rating and links to a Google Maps search for the Facility Management company. It is currently unreachable from any page — but it is one import away from going live on the wrong entity. Delete it, or fix it and wire it to the config.</td></tr>
+<tr><td>NEW-07</td><td>MED</td><td><strong>The build ignores TypeScript and ESLint errors.</strong> Both suppressions are switched on in the build config, which means a type error or a lint failure ships to production silently. This is why the code was reviewed by reading rather than by compiling — and it is worth turning both off once the current backlog is clear, so this class of defect fails the build instead of reaching the site.</td></tr>
+</table>
+
+<h2>7. Recommended sequence for week one</h2>
+
+<p>Ordered so that the compliance breaches close first, then the crawl damage, then the cosmetic items. Nothing here depends on information from you.</p>
+
+<ol>
+<li><strong>Rule 3, everywhere (SV-004 + NEW-01).</strong> Rewrite the seven standalone uses of "zertifiziert" and fix the regional-page lookup so the fallback headline disappears. Do the lookup fix first — it removes 26 violations in one change. Include headings, body copy, footer, alt texts, page titles and meta descriptions, as you specified.</li>
+<li><strong>SEC-01 to SEC-05</strong>, as soon as you send the five lines. Scheduled for this week per your instruction; no client dependency once the text is known.</li>
+<li><strong>Delete rather than hide (SV-001, SV-003, SV-033, SV-034, NEW-05, NEW-06).</strong> One pass removes the contradictory dates, the mismatched carousel, the unattributable testimonials and the dead components. This closes six tracker lines together and shrinks the page.</li>
+<li><strong>Transliteration (SV-014, NEW-03, NEW-04).</strong> Apply the existing helper in the two remaining places and fix the space-in-slug bug, so that no rendered link contains an umlaut or a space.</li>
+<li><strong>Metadata coverage (SV-023, NEW-02).</strong> Extend per-route metadata to the remaining routes so the regional pages stop declaring the homepage as canonical, set <code>metadataBase</code>, and add a real sharing image. Highest SEO return of anything on this list.</li>
+<li><strong>SV-027, then SV-028.</strong> De-duplicate the process steps; make the FAQ answers present in the HTML. Add FAQPage structured data only after you have released the tax answer.</li>
+<li><strong>Images (SV-030, SV-031).</strong> Downscale the logo source, add dimensions and <code>sizes</code> to both logo usages, correct the declared seal aspect ratio, rename the DGuSV file and make the homepage read the seal alt text from the config. The seals themselves are already right.</li>
+<li><strong>SV-036</strong> and the "Weiterbildung" heading correction in the Impressum. Small, quick, and both visible to a reviewer.</li>
+</ol>
+
+<p>Then, when your two end-of-month items arrive: the insurance details switch on the Berufshaftpflicht block (one config value), and the social URLs plus the profile link complete SV-029 and SV-017.</p>
+
+<h2>8. Where to look to see each change</h2>
+
+<table>
+<tr><th style="width:26%">Route</th><th>What to check</th></tr>
+<tr><td><code>/impressum</code></td><td>Rewritten in full. "Qualifikation" as the heading instead of "Berufsbezeichnung"; § 5 DDG; the court sentence in your wording; no Steuernummer; no EU platform link; no eRecht24 note; no empty insurance block. <em>Open item: "Weiterbildung" currently appears as a sub-heading inside Qualifikation.</em></td></tr>
+<tr><td><code>/datenschutz</code></td><td>Rewritten in full. Section 7 on cookies; <strong>section 8</strong> for the newly disclosed Cloudflare Turnstile and form-API processing; <strong>section 13</strong> for third-country transfer; <strong>section 17</strong>, the Art. 21 objection notice, now in a framed bordered box rather than running text.</td></tr>
+<tr><td><code>/agb</code></td><td><strong>New route — this URL previously did not resolve.</strong> §§ 1–14; § 13 retains the non-participation sentence.</td></tr>
+<tr><td><code>/widerrufsbelehrung</code></td><td><strong>New route.</strong> Withdrawal instruction, consequences, the statutory model form, and the note on court-commissioned work. Text not yet final.</td></tr>
+<tr><td>Footer, on any page</td><td>Four legal links now (Impressum, Datenschutz, AGB, Widerrufsbelehrung); the email label and its mailto match; logo alt text corrected; social icons absent because the flag is off. <em>Open items visible here: the "Zertifizierter Sachverständiger" heading, and the umlaut links.</em></td></tr>
+<tr><td><code>/sitemap.xml</code></td><td><code>/agb</code> and <code>/widerrufsbelehrung</code> are now listed; all regional URLs are already in transliterated form.</td></tr>
+<tr><td>Browser tab, on the four legal pages</td><td>Each has its own title and description instead of inheriting the homepage's.</td></tr>
+<tr><td>Homepage, <em>View Source</em></td><td>This is where the open items are: search for "5+ Jahre", "2021", the duplicated step headings, and the absence of any FAQ answer text.</td></tr>
+<tr><td>Any regional page, e.g. <code>/zertifizierter-sachverstaendiger-apen</code></td><td>The H1 currently reads "Zertifizierter Sachverstaendiger in Apen" — the rule-3 violation plus the misspelling described in NEW-01. Also check the canonical tag: it points at the homepage.</td></tr>
+</table>
+
+<h2>9. Open questions, consolidated</h2>
+
+<ol>
+<li>The five SEC lines, as text.</li>
+<li>Hosting provider, plus whether a processing agreement exists.</li>
+<li>Operator of the form API, plus its processing agreement.</li>
+<li>Logfile retention period.</li>
+<li>Cloudflare: processing agreement in place, and which corporate entity.</li>
+<li>Google Business Profile URL (SV-017).</li>
+<li>Professional indemnity insurance details (SV-008) — your end-of-month item.</li>
+<li>The four social profile URLs (SV-029) — your end-of-month item.</li>
+<li>The FAQ tax answer: keep as it stands, or send a replacement.</li>
+<li>The single correct founding year, so the contradiction can be closed for good.</li>
+<li>Should "Immobilienbewertung" also be replaced in the 26 SEO slugs and the tagline, or only in visible copy? Changing the slugs means redirects, which you have asked to avoid elsewhere.</li>
+<li>Access to the uenal-immobilien.de and uenal-fm.de repositories, so the EU-platform link and the carousel mismatch can be checked there as you asked.</li>
+</ol>
+
+<h2>10. Method and its limits</h2>
+
+<p>Everything above was established by reading the source: the full central config, the legal content file, the build configuration, the routing layer, the sitemap, the page templates and the shared components, plus exhaustive searches for each forbidden and required string across the tree. Where a status says "zero hits", that is a search across the whole source directory, not a spot check.</p>
+
+<p>What that method cannot establish, and what should be confirmed in a browser before these lines are closed: that the duplicated process steps and the missing FAQ answers behave in the delivered HTML exactly as the component code implies; that the four legal pages render without a layout defect on mobile; and that the site compiles cleanly — which matters more than usual here, because the build is configured to ignore type and lint errors, so a broken type would not announce itself.</p>
+
+<p class="small">Two accompanying files: <code>docs/Uenal-SV-Tracker-Status-2026-08-26.csv</code> for import into the tracker, and the earlier <code>docs/Uenal-SV-Legal-Update-2026-08-26.html</code>, which documents the legal-page work in detail. This document is HTML rather than .docx because the document-conversion environment was unavailable in this session; opening it in Word and using <em>Save As → Word Document</em> produces a .docx with the formatting intact.</p>
+
+</body>
+</html>

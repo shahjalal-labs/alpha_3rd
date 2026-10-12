@@ -1,0 +1,9 @@
+@import "../styles/index.css";
+
+body{
+    overflow-x: hidden;
+}
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
